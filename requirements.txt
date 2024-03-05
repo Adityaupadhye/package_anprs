@@ -1,6 +1,6 @@
 opencv-python-headless
-matplotlib
-numpy
+# matplotlib
+# numpy
 keras
-tensorflow
+tensorflow-cpu
 setuptools

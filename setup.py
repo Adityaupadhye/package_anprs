@@ -1,8 +1,12 @@
 from setuptools import setup, find_packages
 
+def parse_requirements(filename):
+    with open(filename) as f:
+        return [line.strip() for line in f if line.strip() and not line.startswith("#")]
+
 setup(
     name='anprs',
-    version='0.0.2',
+    version='0.0.3',
     author='Aditya Upadhye',
     author_email='adityasu12@gmail.com',
     description='Automatic Number Plate Recognition System',
@@ -12,11 +16,8 @@ setup(
     packages=find_packages(exclude=['.vscode/*', 'local_env/*']),
     install_requires=[
         'opencv-python-headless',
-        'matplotlib',
-        'numpy',
         'keras',
-        'tensorflow',
-        'setuptools'
+        'tensorflow-cpu'
     ],
     python_requires='>=3.6',
 )

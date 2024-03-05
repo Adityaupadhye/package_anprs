@@ -1,1 +1,1 @@
-from .anprs import *  # noqa: F403
+from anprs import LPR, OCR

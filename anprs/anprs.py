@@ -1,11 +1,11 @@
-from os.path import splitext
-from turtle import mode
+# from os.path import splitext
+# from turtle import mode
 import os
 
 import cv2
 from keras.models import model_from_json, Sequential, load_model
 import numpy as np
-from .local_utils import detect_lp
+from local_utils import detect_lp
 
 
 # helper functions
@@ -287,7 +287,10 @@ class Recognizer:
 
 
 
-if __name__ == '__main__':
+def main(run=False):
+
+    if not run:
+        return
 
     lpr = LPR()
     ocr = OCR()
@@ -304,3 +307,6 @@ if __name__ == '__main__':
         print('License plate not detected')
 
     print(lpr_res, license_plate_number)
+
+if __name__ == '__main__':
+    main()
