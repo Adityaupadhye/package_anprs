@@ -6,7 +6,7 @@ def parse_requirements(filename):
 
 setup(
     name='anprs',
-    version='0.0.3',
+    version='0.0.4',
     author='Aditya Upadhye',
     author_email='adityasu12@gmail.com',
     description='Automatic Number Plate Recognition System',
