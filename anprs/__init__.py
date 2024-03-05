@@ -1,1 +1,1 @@
-from anprs import LPR, OCR
+from .anprs import LPR, OCR

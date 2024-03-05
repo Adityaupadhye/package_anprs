@@ -5,7 +5,7 @@ import os
 import cv2
 from keras.models import model_from_json, Sequential, load_model
 import numpy as np
-from local_utils import detect_lp
+from .local_utils import detect_lp
 
 
 # helper functions
