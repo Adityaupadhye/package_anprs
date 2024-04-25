@@ -15,7 +15,7 @@ def find_model_files(directory):
 
 setup(
     name='anprs',
-    version='0.0.5',
+    version='0.0.6',
     author='Aditya Upadhye',
     author_email='adityasu12@gmail.com',
     description='Automatic Number Plate Recognition System',

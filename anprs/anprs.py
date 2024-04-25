@@ -7,6 +7,8 @@ from keras.models import model_from_json, Sequential, load_model
 import numpy as np
 from .local_utils import detect_lp
 
+module_path = os.path.dirname(__file__)
+print('module path = ', module_path)
 
 # helper functions
 def preprocess_image(image_path, resize=False):
@@ -21,6 +23,7 @@ def preprocess_image(image_path, resize=False):
     return img
 
 def check_image_file_exists(file_path):
+    print('img path = ', file_path)
     if os.path.exists(file_path):
         if os.path.isfile(file_path):
             try:
@@ -42,8 +45,10 @@ def check_image_file_exists(file_path):
 class LPR:
     def __init__(self):
         # Define the paths for the media and results folders
-        self.media_folder = "../media"
-        self.results_folder = "../results"
+        # self.media_folder = "../media"
+        self.media_folder = os.path.join(module_path, '..', 'media')
+        # self.results_folder = "../results"
+        self.results_folder = os.path.join(module_path, '..', 'results')
 
         # Create the media folder if it doesn't exist
         if not os.path.exists(self.media_folder):
@@ -56,7 +61,8 @@ class LPR:
         # Print a message to indicate the folders are created
         print("Folders 'media' and 'results' created successfully.")
 
-    wpod_net_path = "../models/wpod-net.json"
+    # wpod_net_path = "../models/wpod-net.json"
+    wpod_net_path = os.path.join(module_path, '..', 'models', 'wpod-net.json')
 
     def load_lpr_model(self):
         try:
@@ -65,7 +71,9 @@ class LPR:
             #     model_json = json_file.read()
             # model = model_from_json(model_json, custom_objects={})
             # model.load_weights('%s.h5' % path)
-            model = load_model(filepath="../models/wpod_net_all_in_one.h5")
+            wpod_model_path = os.path.join(module_path, '..', 'models', 'wpod_net_all_in_one.h5')
+            # model = load_model(filepath="../models/wpod_net_all_in_one.h5")
+            model = load_model(filepath=wpod_model_path)
             print("LPR Model Loaded successfully...")
             print("Detecting License Plate ... ")
             return model
@@ -92,7 +100,9 @@ class LPR:
         try:
             vehicle, LpImg, cor = self.get_plate(img_path)
             img = cv2.convertScaleAbs(LpImg[0], alpha=255.0)
-            is_saved = cv2.imwrite("../results/res.jpg", img)
+            res_image_path = os.path.join(module_path, '..', 'results', 'res.jpg')
+            # is_saved = cv2.imwrite("../results/res.jpg", img)
+            is_saved = cv2.imwrite(res_image_path, img)
             if(not is_saved):
                 raise Exception('File Error: Could not write cropped image')
             return is_saved
@@ -125,7 +135,10 @@ class LPR:
 
 # class for optical character recognition
 class OCR:
-    ocr_model_path = "../models/ocr_model.h5"
+    # ocr_model_path = "../models/ocr_model.h5"
+    ocr_model_path = os.path.join(module_path, '..', 'models', 'ocr_model.h5')
+
+    contour_img_path = os.path.join(module_path, '..', 'results', 'contour.jpg')
 
     # lp_image_path = 'results/res.jpg'
 
@@ -141,7 +154,9 @@ class OCR:
 
         cntrs = sorted(cntrs, key=cv2.contourArea, reverse=True)[:15]
 
-        ii = cv2.imread("../results/contour.jpg")
+        contour_img_path = os.path.join(module_path, '..', 'results', 'contour.jpg')
+        # ii = cv2.imread("../results/contour.jpg")
+        ii = cv2.imread(contour_img_path)
 
         x_cntr_list = []
         target_contours = []
@@ -212,7 +227,8 @@ class OCR:
 
         dimensions = [LP_WIDTH / 6, LP_WIDTH / 2, LP_HEIGHT / 10, 2 * LP_HEIGHT / 3]
 
-        if not cv2.imwrite("../results/contour.jpg", img_binary_lp):
+        # if not cv2.imwrite("../results/contour.jpg", img_binary_lp):
+        if not cv2.imwrite(self.contour_img_path, img_binary_lp):
             raise Exception("Could not write contours image")
 
         print("image segmented...")
@@ -226,7 +242,8 @@ class OCR:
     # lp_image = cv2.imread(lp_image_path)
 
     # model: Sequential = load_model(filepath='models/ocr_model.h5')
-    model: Sequential = load_model(filepath="../models/ocr_model.h5")
+    # model: Sequential = load_model(filepath="../models/ocr_model.h5")
+    model: Sequential = load_model(filepath=ocr_model_path)
 
     def fix_dimension(self, img):
         new_img = np.zeros((28, 28, 3))
@@ -243,7 +260,8 @@ class OCR:
         """
         print("started ocr...")
 
-        lp_image_path = "../results/res.jpg"
+        # lp_image_path = "../results/res.jpg"
+        lp_image_path = os.path.join(module_path, '..', 'results', 'res.jpg')
         lp_image = cv2.imread(lp_image_path)
         # lp_canny_image = cv2.Canny(lp_image)
         # lp_canny_image = cv2.resize(lp_canny_image, (32,32))
@@ -295,7 +313,9 @@ def main(run=False):
     lpr = LPR()
     ocr = OCR()
 
-    image_path = '../media/photo.jpg'
+    # image_path = '../media/photo.jpg'
+    image_path = os.path.join(module_path, '..', 'media', 'photo.jpg')
+    image_path = os.path.abspath(image_path)
 
     lpr_res = lpr.perform_lpr(image_path)
 
